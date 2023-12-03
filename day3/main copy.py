@@ -22,10 +22,10 @@ height = len(bidimensionalArray)
 possibleGears = []
 
 for j in range(width):
-  for i in range(height):
-    cell = bidimensionalArray[i][j]
-    if (cell == "*"):
-      possibleGears.append((i, j))
+    for i in range(height):
+        cell = bidimensionalArray[i][j]
+        if (cell == "*"):
+            possibleGears.append((i, j))
 
 print(possibleGears)
 
@@ -33,33 +33,36 @@ ratiosList = []
 
 # get all ratios and their start and end position
 for index, line in enumerate(list(map(lambda x: x.strip(), contents))):
-  pattern = r"\d+"
-  for match in re.finditer(pattern, line):
-    startMatch, endMatch = match.start(), match.end()
-    ratiosList.append((int(match.group(0)), startMatch, endMatch, index))
+    pattern = r"\d+"
+    for match in re.finditer(pattern, line):
+        startMatch, endMatch = match.start(), match.end()
+        ratiosList.append((int(match.group(0)), startMatch, endMatch, index))
 
 # get all possible gears
 
 for possibleGear in possibleGears:
-  possibleGearX, possibleGearY = possibleGear
-  # get adjacent cells
-  adjacentCells = [(0, 1), (1, 0), (0, -1), (-1, 0), (1, 1), (-1, -1), (-1, 1), (1, -1)]
-  possibleAdjacentCells = list(map(lambda x: (possibleGearX + x[0], possibleGearY + x[1]), adjacentCells))
+    possibleGearX, possibleGearY = possibleGear
+    # get adjacent cells
+    adjacentCells = [(0, 1), (1, 0), (0, -1), (-1, 0),
+                     (1, 1), (-1, -1), (-1, 1), (1, -1)]
+    possibleAdjacentCells = list(
+        map(lambda x: (possibleGearX + x[0], possibleGearY + x[1]), adjacentCells))
 
-  correspondingGears = []
-  for index, ratio in enumerate(ratiosList):
-    if len(correspondingGears) != 2:
-      ratioValue, ratioStart, ratioEnd, ratioIndex = ratio
-      for possibleAdjacentCell in possibleAdjacentCells:
-        if not ratioValue in correspondingGears:
-          adjacentCellX, adjacentCellY = possibleAdjacentCell
-          isSameLine = ratioIndex == adjacentCellX
-          isInPositionRange = adjacentCellY in range(ratioStart, ratioEnd)
-          if (isSameLine and isInPositionRange):
-            correspondingGears.append(ratioValue)
-            print(ratioValue)
-  if (len(correspondingGears) == 2):
-    print(correspondingGears)
-    result += correspondingGears[0] * correspondingGears[1]
+    correspondingGears = []
+    for index, ratio in enumerate(ratiosList):
+        if len(correspondingGears) != 2:
+            ratioValue, ratioStart, ratioEnd, ratioIndex = ratio
+            for possibleAdjacentCell in possibleAdjacentCells:
+                if not ratioValue in correspondingGears:
+                    adjacentCellX, adjacentCellY = possibleAdjacentCell
+                    isSameLine = ratioIndex == adjacentCellX
+                    isInPositionRange = adjacentCellY in range(
+                        ratioStart, ratioEnd)
+                    if (isSameLine and isInPositionRange):
+                        correspondingGears.append(ratioValue)
+                        print(ratioValue)
+    if (len(correspondingGears) == 2):
+        print(correspondingGears)
+        result += correspondingGears[0] * correspondingGears[1]
 
 print(result)
